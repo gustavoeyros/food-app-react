@@ -11,13 +11,25 @@ const HeaderCartButton = (props) => {
     return curNumber + item.amount;
   }, 0);
 
+  const { items } = cartCtx;
+
   const btnClasses = `${classes.button} ${
     btnIsHighlighted ? classes.bump : ""
   }`;
 
   useEffect(() => {
+    if (items.length === 0) {
+      return;
+    }
     setBtnIsHighlighted(true);
-  }, []);
+    setTimeout(() => {
+      setBtnIsHighlighted(false);
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [items]);
 
   return (
     <button className={btnClasses} onClick={props.onClick}>
