@@ -5,8 +5,11 @@ import { useEffect, useState } from "react";
 
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const fetchMeals = async () => {
+      setIsLoading(true);
       const response = await fetch(import.meta.env.VITE_FIREBASE_URL);
       const responseData = await response.json();
       const loadedMeals = [];
@@ -19,10 +22,19 @@ const AvailableMeals = () => {
         });
       }
       setMeals(loadedMeals);
+      setIsLoading(false);
     };
 
     fetchMeals();
   }, []);
+
+  if (isLoading) {
+    return (
+      <section className={classes.MealsLoading}>
+        <p>Loading...</p>
+      </section>
+    );
+  }
 
   const mealsList = meals.map((meal) => {
     return (
